@@ -1,0 +1,2 @@
+export const CUSTOMER_TOKEN = 'CUSTOMER_TOKEN';
+export type CUSTOMER_TOKEN_TYPE = typeof CUSTOMER_TOKEN;
