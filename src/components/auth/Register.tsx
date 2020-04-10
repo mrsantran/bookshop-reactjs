@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './style.css';
+import { withRouter } from 'react-router-dom';
 
 export interface Props {
 
@@ -84,4 +85,4 @@ const Register = (props?: Props) => {
     );
 }
 
-export default React.memo(Register);
+export default withRouter(React.memo(Register));

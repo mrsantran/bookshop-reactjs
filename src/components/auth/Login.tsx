@@ -2,7 +2,12 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/types';
 import actions, { signIn } from '../../store/auth/actions';
+import Loading from './../common/Loading';
+import History from './../common/History';
 import './style.css';
+// import { Redirect } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
+import { PATH } from '../../config/Constants';
 
 const { useEffect, useState } = React;
 let _loadKey: any = null;
@@ -12,6 +17,7 @@ export interface Props {
 
 const Login = (props?: Props) => {
     const dispatch = useDispatch();
+    const _his = useHistory();
     const [username, setUsername] = useState('admin');
     const [password, setPassword] = useState('Aa@123456');
     const [seePwd, setSeePwd] = useState(false);
@@ -27,18 +33,29 @@ const Login = (props?: Props) => {
         // } else {
         //   _loadKey && Portal.remove(_loadKey);
         // }
-        // if (fetchSignIn.error) {
-        //   Toast.fail(fetchSignIn.message || '');
-        //   // dispatch(resetAuthStatus());
-        // }
+        // alert(fetchSignIn.error);
+        // alert(fetchSignIn.loading)
+        if (fetchSignIn.error) {
+            //   Toast.fail(fetchSignIn.message || '');
+            // dispatch(resetAuthStatus());
+            alert("Error");
+        }
         if (fetchSignIn.data) {
-            alert(fetchSignIn.data);
+            // alert(fetchSignIn.data);
             // onBack();
             //   onBackToHome();
+            // History.push("/dashboard")
+            // return (<Redirect to="/your-new-location" push />);
+            // setTimeout(()=> {
+            //     history.push("/books");
+            // },0);
+            _his.push(PATH.Home);
+            location.reload();
         }
     }, [fetchSignIn]);
 
-    const onSignInPress = () => {
+    const onSignInPress = (event: any) => {
+        // history.push("/books");
         // alert ("submit");
         // if (!username) {
         //   setTimeout(() => {
@@ -51,19 +68,19 @@ const Login = (props?: Props) => {
         //   return;
         // }
         dispatch(signIn({ username, password }));
+        event.preventDefault();
     };
-
     return (
         <div className="row justify-content-center">
             <div className="col-md-8">
                 <div className="card">
                     <div className="card-header">Sign In</div>
                     <div className="card-body"></div>
-                    <form action="" method="" onSubmit={onSignInPress}>
+                    <form onSubmit={onSignInPress}>
                         <div className="form-group row">
                             <label className="col-md-4 col-form-label text-md-right">E-Mail Address</label>
                             <div className="col-md-6">
-                                <input type="text" id="email_address" className="form-control" name="email-address" defaultValue={username} />
+                                <input type="text" className="form-control" defaultValue={username} />
                             </div>
                         </div>
 
@@ -100,7 +117,7 @@ const Login = (props?: Props) => {
                         </div>
                         <div className="form-group row">
                             <div className="col-md-6 offset-md-4">
-                                <button type="submit" className="btn btn-primary btn-block" >Login</button>
+                                <button type="submit" className="btn btn-primary btn-block" disabled={fetchSignIn.loading}>Login</button>
                             </div>
                         </div>
                         <div className="form-group row">
@@ -115,4 +132,4 @@ const Login = (props?: Props) => {
     );
 }
 
-export default React.memo(Login);
+export default withRouter(React.memo(Login));

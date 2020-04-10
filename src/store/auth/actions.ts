@@ -31,6 +31,7 @@ interface FetchSignUpReq {
   email1: string;
   phone1: string;
 }
+
 export interface FetchSignInRes {
   data: string;
 }

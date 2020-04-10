@@ -6,62 +6,41 @@ import Register from './components/auth/Register';
 import BookList from './components/books/BookList';
 import Cart from './components/books/Cart';
 import NotFound from './components/notfound/NotFound';
-import logo from './assets/story.png';
-import cart from './assets/cart.png';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-// import { browserHistory } from 'react-router';
+import { BrowserRouter as Router, Switch, Route, Link, NavLink } from "react-router-dom";
+import { PATH } from './config/Constants';
+import PrivateRoute from './components/common/PrivateRoute';
+import Home from './components/home/Home';
+import Logout from './components/auth/Logout';
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
+import { isValidToken } from './utils/Request';
+import CarouselSlide from './components/header/CarouselSlide';
+import CustomHeader from './components/header/CustomHeader';
 
-const App = () => {
+const App = (props: any) => {
+
   return (
-    <Router>
+    <Router >
       <div className="App">
-
-        <nav className="navbar navbar-expand-lg navbar-light navbar-laravel">
-          <div className="container">
-            {/* <a className="navbar-brand" href="#">Laravel</a> */}
-            <img src={logo} width="40px" height="40px" />
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/sign-in"}>Login</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/sign-up"}>Register</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/books"}>Books</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/cart"}><img src={cart} width="30px" height="30px" alt="Your cart" /></Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-        <main className="login-form">
+        {/* <Header /> */}
+        <CustomHeader />
+        {isValidToken() && <CarouselSlide />}
+        <main className="mainBody">
           <div className="container">
             <Switch>
-              <Route exact path='/' component={Login} />
-              <Route path="/sign-in" component={Login} />
-              <Route path="/sign-up" component={Register} />
-              <Route path="/books" component={BookList} />
-              <Route path="/cart" component={Cart} />
+              <Route exact path='/' component={Home} />
+              <Route exact path={PATH.Login} component={Login} />
+              <Route exact path={PATH.Register} component={Register} />
+              <PrivateRoute exact path={PATH.Book} component={BookList} />
+              <PrivateRoute exact path={PATH.Cart} component={Cart} />
+              <PrivateRoute exact path={PATH.Logout} component={Logout} />
               <Route path='*' component={NotFound} />
             </Switch>
           </div>
         </main>
+        <Footer />
       </div>
-      {/* <div className="auth-wrapper">
-        <div className="auth-inner">
-          
-        </div>
-      </div>
-    </div> */}
     </Router>);
 }
 
-export default App;
+export default React.memo(App);

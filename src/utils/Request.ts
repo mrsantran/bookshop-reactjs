@@ -2,12 +2,16 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import Network from '../config/Network';
 import BaseConfig from '../config';
 import { CUSTOMER_TOKEN } from '../config/Constants';
-import { object } from 'prop-types';
 
-const getToken = async () => {
-  const customerToken = await localStorage.getItem(CUSTOMER_TOKEN);
+const getToken = () => {
+  const customerToken = localStorage.getItem(CUSTOMER_TOKEN);
   return customerToken;
 };
+
+export const isValidToken = () => {
+  const token = localStorage.getItem(CUSTOMER_TOKEN);
+  return token && Object.keys(token).length !== 0 && token.constructor !== Object;
+}
 
 // create an axios instance
 const service = axios.create({
@@ -23,9 +27,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   async config => {
-    // alert(config)
-    console.log('request -->>> ', config);
-    const token = await getToken();
+    const token = getToken();
     console.log('token -> ', token);
     // alert(JSON.stringify(token))
     // do something before request is sent
@@ -37,10 +39,12 @@ service.interceptors.request.use(
       config.headers['X-Authorization'] = token;
       config.headers['Authorization'] = `Bearer ${token}`;
     }
+    // config.headers['Access-Control-Allow-Origin'] = true;
+    // config.headers['Access-Control-Allow-Origin'] = 'http://localhost:5000';
+    // config.headers['Access-Control-Allow-Credentials'] = true;
     return config;
   },
   error => {
-    alert(JSON.stringify(error))
     // do something with request error
     console.log(error); // for debug
     return Promise.reject(error);
@@ -60,12 +64,7 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    alert("adasds");
-    // debugger
     const res = response.data;
-    console.log('response --->>> ', JSON.stringify(res));
-    // alert("dadad")
-    // alert(res)
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 1 && res.code !== 20000) {
       // TODO:
@@ -88,16 +87,12 @@ service.interceptors.response.use(
     return res;
   },
   (error: any) => {
-    debugger
-    // alert("1212");
     const err = error;
-    alert(JSON.stringify(error))
     console.log(`err${err}`); // for debug
     if (err.message === 'Network Error') {
       err.message = 'Network error, please check and try again';
     } else {
       err.message = 'Server error, please try again later';
-      // alert(err.message);
     }
     return Promise.reject(err);
   }
@@ -108,14 +103,12 @@ export const fetchData = (url: string, options = {}) => {
   return new Promise((resolve, reject) => {
     return axios(url, options)
       .then((response: AxiosResponse) => {
-        alert(JSON.stringify(response))
         response.status !== 200 ? reject(response) : resolve(response)
 
       })
       // .then((response: AxiosResponse) => response.data)
       // .then((response: AxiosResponse) => resolve(response))
       .catch((error: AxiosError) => {
-        alert("error")
         return reject(error);
       });
   });

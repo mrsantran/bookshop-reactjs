@@ -42,26 +42,12 @@ export function* fetchService(action: any, loading: boolean = true, success: boo
       req.params = params;
 
     } else {
-      // req.data = params;
       req.data = JSON.stringify(params)
-      // console.log(req.data);
     }
-    // alert(JSON.stringify(req));
-    // alert("test")
-    const res = yield Request(req).then(re=> {
-      alert(re)
-    }, er => {
-      alert(er)  
-    }).catch(e => {
-      alert("response error")
-      alert(JSON.stringify(e))
-    });
-    // debugger
-    // const res = yield call(loginApi, params, url);
-    // alert(res)
+    const res = yield Request(req);
     // console.log("status >>>>>>>>>>>>>>>>>>> ", res.status);
     if(res.status && (res.status == 200 || res.status ==201)){
-      yield put({ type: types.success, url, stateKey, payload: res.data });
+      yield put({ type: types.success, url, stateKey, payload: res });
       return res;
     }
 
@@ -96,7 +82,6 @@ export function* fetchService(action: any, loading: boolean = true, success: boo
     return res;
   } catch (e) {
     console.log(">>>>>>>>>>>>>>>>>>>>>>>>> ", e);
-    alert(e)
     if (error) {
       yield put({ type: types.error, url, stateKey, payload: { message: e.message }});
     } else {

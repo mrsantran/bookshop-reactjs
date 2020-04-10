@@ -30,23 +30,23 @@ function* signInService(action: ReturnType<typeof signIn>) {
 
     
     // const api = actions.fetchSignIn()
-    // const res: typeof api.payload = yield* fetchService(api);
-    const { types, url, stateKey, method, params, meta } = api;
-    const options = {
-      method: 'post',
-      // url,
-      data: JSON.stringify(params),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    }
-    alert("jaja")
-    const _res = yield fetchData(url, options);
-    alert(JSON.stringify(_res))
-    if(true){
-      return _res
-    }
-    alert(JSON.stringify(_res))
+    const res: typeof api.payload = yield* fetchService(api);
+    // const { types, url, stateKey, method, params, meta } = api;
+    // const options = {
+    //   method: 'post',
+    //   // url,
+    //   data: JSON.stringify(params),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   }
+    // }
+    // alert("jaja")
+    // const _res = yield fetchData(url, options);
+    // alert(JSON.stringify(_res))
+    // if(true){
+    //   return _res
+    // }
+    // alert(JSON.stringify(_res))
 
     // let { data } = yield call(loginApi, params, url);
     // alert("test")
@@ -54,12 +54,10 @@ function* signInService(action: ReturnType<typeof signIn>) {
 
     // alert(JSON.stringify(params))
     // let { data } = yield loginApi(params, url);
-    // alert(JSON.stringify(data))
     // const res: typeof api.payload = yield call(loginApi, params, url);
     // alert(res)
     if (res) {
       const { data: token } = res;
-      // alert(token)
       yield localStorage.setItem(CUSTOMER_TOKEN, token);
       yield put(actions.changeToken(token));
 

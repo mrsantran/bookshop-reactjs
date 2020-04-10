@@ -10,13 +10,25 @@ const prefix = 'home/';
 enum BasicTypes {
     book,
     author,
+    user,
+    newestBooks,
+    bestSellerBooks,
+    mostPopularBooks,
     clearFetchBook,
-    clearFetchAuthor
+    clearFetchAuthor,
+    clearfetchUser,
+    clearFetchNewestBooks,
+    clearFetchBestSellerBooks,
+    clearFetchMostPopularBooks
 }
 
 enum FetchTypes {
     fetchBook,
     fetchAuthor,
+    fetchUser,
+    fetchNewestBooks,
+    fetchBestSellerBooks,
+    fetchMostPopularBooks
 }
 
 const Types = composeTypes({
